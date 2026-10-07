@@ -12,9 +12,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.2.1"
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "proyecto-final-tup": "file:.."
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.4",
     "ts-node-dev": "^2.0.0",
