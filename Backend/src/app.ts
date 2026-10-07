@@ -14,17 +14,13 @@ app.use(express.json());
 
 app.use("/api", pruebaRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  const frontendPath = path.join(__dirname, "../../Frontend/dist");
+const frontendPath = path.join(__dirname, "../../Frontend/dist");
 
-  app.use(express.static(frontendPath));
+app.use(express.static(frontendPath));
 
-  app.get(/.*/, (_req, res) => {
-    res.sendFile(path.join(frontendPath, "index.html"));
-  });
-}
-
-
+app.get(/.*/, (_req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 
 
 const PORT = process.env.PORT || 3000;
