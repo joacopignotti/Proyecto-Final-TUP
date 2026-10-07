@@ -13,7 +13,8 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "proyecto-final-tup": "file:.."
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

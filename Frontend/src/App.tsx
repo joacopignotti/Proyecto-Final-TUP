@@ -4,7 +4,7 @@ function App() {
   const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/prueba")
+    fetch("/api/prueba")
       .then((res) => res.json())
       .then((data) => setMensaje(data.mensaje))
       .catch((error) => console.error("Error:", error));

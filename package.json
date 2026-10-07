@@ -1,0 +1,12 @@
+{
+  "name": "proyecto-final-tup",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm --prefix Frontend install --include=dev && npm --prefix Frontend run build && npm --prefix Backend install --include=dev && npm --prefix Backend run build",
+
+    "start": "npm --prefix Backend start"
+  }
+}
+
+
