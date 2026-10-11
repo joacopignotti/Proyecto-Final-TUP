@@ -1,22 +1,15 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './context/AuthProvider'
+import { AppRouter } from './router/AppRouter'
 
 function App() {
-  const [mensaje, setMensaje] = useState("");
-
-  useEffect(() => {
-    fetch("/api/prueba")
-      .then((res) => res.json())
-      .then((data) => setMensaje(data.mensaje))
-      .catch((error) => console.error("Error:", error));
-  }, []);
-
   return (
-    <div>
-      <h1>Proyecto Final TUP</h1>
-      <p>{mensaje}</p>
-    </div>
-  );
+    <BrowserRouter>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
+    </BrowserRouter>
+  )
 }
 
-export default App;
-
+export default App
