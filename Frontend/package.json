@@ -10,9 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "proyecto-final-tup": "file:..",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
