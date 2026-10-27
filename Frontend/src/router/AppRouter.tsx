@@ -8,6 +8,7 @@ import EnConstruccion from '../pages/modulos/EnConstruccion'
 import Perfil from '../pages/perfil/Perfil'
 import Seguimiento from '../pages/seguimiento/Seguimiento'
 import { MODULOS } from './modulos'
+import { PAGINAS_MODULO } from './paginasModulos'
 import { ProtectedRoute } from './ProtectedRoute'
 
 export function AppRouter() {
@@ -26,13 +27,16 @@ export function AppRouter() {
           <Route path="/" element={<Home />} />
           <Route path="/perfil" element={<Perfil />} />
 
-          {/* Un bloque por módulo, protegido por rol. Cada integrante reemplaza
-              EnConstruccion por su pantalla (lista, detalle, etc.). */}
-          {MODULOS.map((m) => (
-            <Route key={m.path} element={<ProtectedRoute roles={m.roles} />}>
-              <Route path={`${m.path}/*`} element={<EnConstruccion />} />
-            </Route>
-          ))}
+          {/* Un bloque por módulo, protegido por rol. La pantalla de cada uno se
+              registra en router/paginasModulos.ts; si falta, se ve EnConstruccion. */}
+          {MODULOS.map((m) => {
+            const Pagina = PAGINAS_MODULO[m.path] ?? EnConstruccion
+            return (
+              <Route key={m.path} element={<ProtectedRoute roles={m.roles} />}>
+                <Route path={`${m.path}/*`} element={<Pagina />} />
+              </Route>
+            )
+          })}
         </Route>
       </Route>
 

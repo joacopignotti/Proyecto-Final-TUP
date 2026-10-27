@@ -10,7 +10,7 @@ export interface Modulo {
 /**
  * Módulos del sistema y qué perfiles los usan (según la propuesta técnica).
  * Es la única fuente para el menú, los accesos rápidos y la protección de rutas:
- * para sumar una pantalla, se agrega acá y en router/AppRouter.tsx.
+ * para sumar un módulo, se agrega acá y su pantalla en router/paginasModulos.ts.
  */
 export const MODULOS: Modulo[] = [
   {
