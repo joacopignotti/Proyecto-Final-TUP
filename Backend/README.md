@@ -7,11 +7,13 @@ src/
   config/        variables de entorno (env.ts)
   routes/v1/     un router por entidad, registrados en index.ts
   controllers/   leen la request y responden
-  services/      lógica de negocio (hoy sobre mocks)
+  services/      lógica de negocio (sobre los repositorios)
+  repositories/  acceso a datos (hoy en memoria, mañana Sequelize)
   models/        interfaces TypeScript de cada entidad
   mocks/         datos de ejemplo
   middlewares/   notFound y errorHandler
-  utils/         apiResponse, httpError, paginate
+  utils/         apiResponse, httpError, paginate y la base del CRUD
+                 (memoryRepository, crudService, crudController, crudRouter)
 ```
 
 ## Uso
@@ -32,5 +34,6 @@ npm run build && npm start
 | POST | `/api/v1/auth/login` | Login simulado (`{ email, password }`) |
 | POST | `/api/v1/auth/register` | Alta simulada, no guarda nada |
 | POST | `/api/v1/auth/recuperar-password` | Simulado, no envía mails |
+| GET, POST, PUT/PATCH, DELETE | `/api/v1/clientes`, `/equipos`, `/ordenes`, `/repuestos`, `/presupuestos` | CRUD de cada entidad (listado con `page`, `limit`, `sortBy`, `order`, `q` y filtros). Los datos viven en memoria hasta reiniciar el servidor |
 
 Las pautas para sumar entidades y el formato de respuesta están en el [README de la raíz](../README.md).
