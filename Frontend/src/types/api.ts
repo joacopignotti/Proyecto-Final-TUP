@@ -13,6 +13,16 @@ export interface ApiResponse<T = unknown> {
   meta?: PaginationMeta
 }
 
+/** Parámetros de los listados: paginado, orden, búsqueda y filtros por campo. */
+export interface ListParams {
+  page?: number
+  limit?: number
+  sortBy?: string
+  order?: 'asc' | 'desc'
+  q?: string
+  [filtro: string]: string | number | boolean | undefined
+}
+
 export type Rol = 'administrador' | 'recepcionista' | 'tecnico'
 
 export interface Usuario {

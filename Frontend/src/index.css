@@ -315,6 +315,143 @@ code {
   margin: 0;
 }
 
+/* ---------- Listados (components/ui) ---------- */
+.lista__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.lista__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.buscador {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.buscador input,
+.buscador select {
+  font: inherit;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  min-width: 14rem;
+}
+
+.buscador select {
+  min-width: 7rem;
+}
+
+.buscador__campo {
+  position: relative;
+  display: flex;
+}
+
+.buscador__campo input {
+  flex: 1;
+  padding-right: 2rem;
+}
+
+.buscador__limpiar {
+  position: absolute;
+  right: 0.3rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.tabla {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+.tabla--cargando {
+  opacity: 0.6;
+}
+
+.tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabla th,
+.tabla td {
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.tabla th {
+  background: #eceee8;
+  font-weight: 600;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabla__orden {
+  font: inherit;
+  font-weight: 600;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.tabla__fila--click {
+  cursor: pointer;
+}
+
+.tabla__fila--click:hover,
+.tabla__fila--click:focus-visible {
+  background: #f6f1e3;
+}
+
+.tabla__vacia {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 1.5rem;
+}
+
+.paginado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.paginado__botones {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 /* ---------- Mobile ---------- */
 @media (max-width: 760px) {
   .app__cuerpo {
