@@ -57,6 +57,7 @@ export default function PresupuestoDetalle() {
     )
   }
 
+  // Calcular el costo de los repuestos.
   const totalRepuestos = presupuesto
     ? presupuesto.items.reduce(
         (total, item) =>
@@ -65,10 +66,12 @@ export default function PresupuestoDetalle() {
       )
     : 0
 
+  // Mostrar el total actualizado en pantalla.
   const total = presupuesto
     ? presupuesto.manoDeObra + totalRepuestos
     : 0
 
+  // Guardar las modificaciones.
   const guardar = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -87,10 +90,11 @@ export default function PresupuestoDetalle() {
     setGuardando(true)
 
     try {
+      // El backend recalcula el total.
+      // Solo enviamos mano de obra y estado.
       await presupuestoService.actualizar(presupuesto.id, {
         manoDeObra: presupuesto.manoDeObra,
         estado: presupuesto.estado,
-        total,
       })
 
       navigate(rutaListado)
@@ -105,6 +109,7 @@ export default function PresupuestoDetalle() {
     }
   }
 
+  // Eliminar el presupuesto.
   const eliminar = async () => {
     if (!presupuesto || guardando) return
 
@@ -160,7 +165,6 @@ export default function PresupuestoDetalle() {
       <h1>Detalle del presupuesto #{presupuesto.id}</h1>
 
       <form onSubmit={guardar} className="form">
-
         <label>
           Orden de trabajo
           <input
@@ -229,7 +233,9 @@ export default function PresupuestoDetalle() {
                 <tr key={item.id}>
                   <td>{item.repuestoId}</td>
                   <td>{item.cantidad}</td>
-                  <td>${item.costoUnitario.toLocaleString('es-AR')}</td>
+                  <td>
+                    ${item.costoUnitario.toLocaleString('es-AR')}
+                  </td>
                   <td>
                     ${(item.cantidad * item.costoUnitario)
                       .toLocaleString('es-AR')}
@@ -241,7 +247,8 @@ export default function PresupuestoDetalle() {
         )}
 
         <p>
-          Total de repuestos: ${totalRepuestos.toLocaleString('es-AR')}
+          Total de repuestos:{' '}
+          ${totalRepuestos.toLocaleString('es-AR')}
         </p>
 
         <h2>
