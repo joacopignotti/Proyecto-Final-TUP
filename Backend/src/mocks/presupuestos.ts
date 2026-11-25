@@ -1,6 +1,5 @@
 import { Presupuesto } from "../models/Presupuesto";
 
-// TODO (dueño de Presupuestos y repuestos): sumar presupuestos en cada estado.
 export const presupuestosMock: Presupuesto[] = [
   {
     id: 1,
@@ -10,5 +9,68 @@ export const presupuestosMock: Presupuesto[] = [
     total: 63000,
     estado: "pendiente",
     createdAt: "2026-10-03T09:00:00.000Z",
+  },
+  {
+    id: 2,
+    ordenId: 4,
+    manoDeObra: 22000,
+    items: [{ id: 2, repuestoId: 2, cantidad: 1, costoUnitario: 65000 }],
+    total: 87000,
+    estado: "pendiente",
+    createdAt: "2026-11-18T12:00:00.000Z",
+  },
+  {
+    id: 3,
+    ordenId: 5,
+    manoDeObra: 20000,
+    items: [{ id: 3, repuestoId: 3, cantidad: 1, costoUnitario: 85000 }],
+    total: 105000,
+    estado: "aprobado",
+    createdAt: "2026-11-16T10:30:00.000Z",
+  },
+  {
+    id: 4,
+    ordenId: 8,
+    manoDeObra: 18000,
+    items: [{ id: 4, repuestoId: 4, cantidad: 1, costoUnitario: 55000 }],
+    total: 73000,
+    estado: "pendiente",
+    createdAt: "2026-11-14T11:00:00.000Z",
+  },
+  {
+    id: 5,
+    ordenId: 9,
+    manoDeObra: 25000,
+    items: [{ id: 5, repuestoId: 5, cantidad: 1, costoUnitario: 18000 }],
+    total: 43000,
+    estado: "aprobado",
+    createdAt: "2026-11-09T12:00:00.000Z",
+  },
+  {
+    id: 6,
+    ordenId: 10,
+    manoDeObra: 16000,
+    items: [{ id: 6, repuestoId: 6, cantidad: 1, costoUnitario: 22000 }],
+    total: 38000,
+    estado: "aprobado",
+    createdAt: "2026-10-26T10:00:00.000Z",
+  },
+  {
+    id: 7,
+    ordenId: 13,
+    manoDeObra: 15000,
+    items: [{ id: 7, repuestoId: 7, cantidad: 1, costoUnitario: 25000 }],
+    total: 40000,
+    estado: "rechazado",
+    createdAt: "2026-10-29T12:00:00.000Z",
+  },
+  {
+    id: 8,
+    ordenId: 15,
+    manoDeObra: 15000,
+    items: [{ id: 8, repuestoId: 8, cantidad: 1, costoUnitario: 20000 }],
+    total: 35000,
+    estado: "rechazado",
+    createdAt: "2026-11-06T11:00:00.000Z",
   },
 ];

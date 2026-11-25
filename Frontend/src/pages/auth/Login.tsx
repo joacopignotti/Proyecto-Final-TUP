@@ -61,7 +61,6 @@ export default function Login() {
         <strong>Usuarios de prueba</strong> (contraseña <code>taller123</code>)
         <ul>
           <li><code>admin@taller.com</code> — Administrador</li>
-          <li><code>recepcion@taller.com</code> — Recepción</li>
           <li><code>tecnico@taller.com</code> — Técnico</li>
         </ul>
       </aside>
