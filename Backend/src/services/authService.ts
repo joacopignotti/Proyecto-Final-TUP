@@ -149,7 +149,7 @@ export const register = (data: {
     nombre,
     apellido,
     email,
-    rol: "recepcionista",
+    rol: "tecnico",
     activo: true,
   };
 
