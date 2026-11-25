@@ -68,8 +68,8 @@ const ETIQUETAS_ESTADO: Record<EstadoOrden, string> = {
   cancelada: "Cancelada",
 };
 
-const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
+const API_BASE = "/api/v1";
 
 /** Consulta pública del cliente por código de seguimiento (no requiere login). */
 export default function Seguimiento() {
