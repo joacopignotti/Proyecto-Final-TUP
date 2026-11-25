@@ -4,6 +4,10 @@ import EquiposRoutes from '../pages/equipos/EquiposRoutes'
 import OrdenesRoutes from '../pages/ordenes/OrdenesRoutes'
 import PresupuestosRoutes from '../pages/presupuestos/PresupuestosRoutes'
 
+
+import Reportes from "../pages/reportes/Reportes";
+
+
 /**
  * Pantalla de cada módulo, por path de MODULOS. Cada una resuelve sus propias
  * subrutas (lista, nuevo, :id). Los módulos que no están acá muestran EnConstruccion.
@@ -13,4 +17,5 @@ export const PAGINAS_MODULO: Record<string, ComponentType> = {
   '/equipos': EquiposRoutes,
   '/ordenes': OrdenesRoutes,
   '/presupuestos': PresupuestosRoutes,
+  "/reportes": Reportes,
 }
