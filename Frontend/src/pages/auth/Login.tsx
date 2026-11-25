@@ -47,6 +47,9 @@ export default function Login() {
         <button type="submit" className="btn" disabled={cargando}>
           {cargando ? 'Ingresando…' : 'Ingresar'}
         </button>
+        <Link to="/seguimiento" className="btn btn--secundario auth__seguimiento">
+            Consultar seguimiento de reparación
+        </Link>
       </form>
 
       <p className="auth__links">
