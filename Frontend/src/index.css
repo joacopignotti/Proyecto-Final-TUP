@@ -727,3 +727,11 @@ code {
     padding: 1.1rem 0.9rem 2rem;
   }
 }
+
+.auth__seguimiento {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 0.75rem;
+}
+
