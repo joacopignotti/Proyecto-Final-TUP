@@ -1,0 +1,232 @@
+{
+    "info": {
+        "_postman_id": "5797ac60-8be2-412f-832d-36d41f68ccaa",
+        "name": "Sistema Taller - Grupo 2",
+        "description": "Colección de endpoints de la API REST del Sistema de Gestión Integral para Talleres (UTN FRBB - Grupo 2).",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_exporter_id": "55360258",
+        "_collection_link": "https://go.postman.co/collection/55360258-5797ac60-8be2-412f-832d-36d41f68ccaa?source=collection_link"
+    },
+    "item": [
+        {
+        "name": "auth",
+        "item": [
+            {
+            "name": "POST login (obtiene token)",
+            "event": [
+                {
+                "listen": "test",
+                "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                    "const res = pm.response.json();\nif (res && res.data && res.data.token) {\n    pm.collectionVariables.set('token', res.data.token);\n}"
+                    ]
+                }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                }
+                ],
+                "body": {
+                "mode": "raw",
+                "raw": "{\n  \"email\": \"admin@taller.com\",\n  \"password\": \"taller123\"\n}",
+                "options": {
+                    "raw": {
+                    "language": "text"
+                    }
+                }
+                },
+                "url": {
+                "raw": "{{url_backend}}/auth/login",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "auth",
+                    "login"
+                ]
+                }
+            },
+            "response": []
+            }
+        ]
+        },
+        {
+        "name": "clientes (alumno 1)",
+        "item": [
+            {
+            "name": "GET lista clientes (paginado y ordenado)",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                "raw": "{{url_backend}}/clientes?page=1&limit=10&sortBy=id&order=asc",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes"
+                ],
+                "query": [
+                    {
+                    "key": "page",
+                    "value": "1"
+                    },
+                    {
+                    "key": "limit",
+                    "value": "10"
+                    },
+                    {
+                    "key": "sortBy",
+                    "value": "id"
+                    },
+                    {
+                    "key": "order",
+                    "value": "asc"
+                    }
+                ]
+                }
+            },
+            "response": []
+            },
+            {
+            "name": "GET buscar clientes por DNI o nombre",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                "raw": "{{url_backend}}/clientes?q=30111222",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes"
+                ],
+                "query": [
+                    {
+                    "key": "q",
+                    "value": "30111222"
+                    }
+                ]
+                }
+            },
+            "response": []
+            },
+            {
+            "name": "GET cliente por ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                "raw": "{{url_backend}}/clientes/1",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes",
+                    "1"
+                ]
+                }
+            },
+            "response": []
+            },
+            {
+            "name": "POST crear cliente",
+            "request": {
+                "method": "POST",
+                "header": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                }
+                ],
+                "body": {
+                "mode": "raw",
+                "raw": "{\n  \"nombre\": \"Valeria\",\n  \"apellido\": \"Castro\",\n  \"dni\": \"34567890\",\n  \"telefono\": \"291 4567890\",\n  \"email\": \"valeria.castro@mail.com\",\n  \"activo\": true\n}"
+                },
+                "url": {
+                "raw": "{{url_backend}}/clientes",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes"
+                ]
+                }
+            },
+            "response": []
+            },
+            {
+            "name": "PATCH actualizar cliente",
+            "request": {
+                "method": "PATCH",
+                "header": [
+                {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                }
+                ],
+                "body": {
+                "mode": "raw",
+                "raw": "{\n  \"telefono\": \"291 4990000\",\n  \"activo\": true\n}"
+                },
+                "url": {
+                "raw": "{{url_backend}}/clientes/1",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes",
+                    "1"
+                ]
+                }
+            },
+            "response": []
+            },
+            {
+            "name": "DELETE eliminar cliente",
+            "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                "raw": "{{url_backend}}/clientes/13",
+                "host": [
+                    "{{url_backend}}"
+                ],
+                "path": [
+                    "clientes",
+                    "13"
+                ]
+                }
+            },
+            "response": []
+            }
+        ],
+        "auth": {
+            "type": "bearer",
+            "bearer": [
+            {
+                "key": "token",
+                "value": "{{token}}",
+                "type": "string"
+            }
+            ]
+        }
+        }
+    ],
+    "variable": [
+        {
+        "key": "url_backend",
+        "value": "http://localhost:3000/api/v1"
+        },
+        {
+        "key": "token",
+        "value": ""
+        }
+    ]
+}
