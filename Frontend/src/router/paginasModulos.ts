@@ -3,6 +3,7 @@ import ClientesRoutes from '../pages/clientes/ClientesRoutes'
 import EquiposRoutes from '../pages/equipos/EquiposRoutes'
 import OrdenesRoutes from '../pages/ordenes/OrdenesRoutes'
 import PresupuestosRoutes from '../pages/presupuestos/PresupuestosRoutes'
+import Usuarios from '../pages/usuarios/usuarios'
 
 
 import Reportes from "../pages/reportes/Reportes";
@@ -18,4 +19,5 @@ export const PAGINAS_MODULO: Record<string, ComponentType> = {
   '/ordenes': OrdenesRoutes,
   '/presupuestos': PresupuestosRoutes,
   "/reportes": Reportes,
+  "/usuarios": Usuarios,
 }
