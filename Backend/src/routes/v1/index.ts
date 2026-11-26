@@ -7,6 +7,7 @@ import ordenRoutes from "./ordenRoutes";
 import presupuestoRoutes from "./presupuestoRoutes";
 import repuestoRoutes from "./repuestoRoutes";
 import seguimientoRoutes from "./seguimientoRoutes";
+import usuarioRoutes from "./usuarioRoutes";
 
 import estadisticasRoutes from "./estadisticasRoutes";
  
@@ -22,6 +23,7 @@ router.use("/ordenes", ordenRoutes);
 router.use("/repuestos", repuestoRoutes);
 router.use("/presupuestos", presupuestoRoutes);
 router.use("/estadisticas", estadisticasRoutes);
+router.use("/usuarios", usuarioRoutes);
 
 
 
