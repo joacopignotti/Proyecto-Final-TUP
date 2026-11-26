@@ -1,7 +1,7 @@
-
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { MOCK_PASSWORD, ROLES, usuariosMock } from "../mocks/usuarios";
+import { MOCK_PASSWORD, usuariosMock } from "../mocks/usuarios";
 import type { Rol, Usuario } from "../models/Usuario";
+import { usuarioRepository } from "../repositories/usuarioRepository";
 import { HttpError } from "../utils/httpError";
 
 export interface LoginResult {
@@ -9,11 +9,6 @@ export interface LoginResult {
   usuario: Usuario;
 }
 
-// Usuarios nuevos registrados durante la ejecución.
-const usuariosRegistrados: Usuario[] = [];
-
-// Hashes de contraseñas de los usuarios nuevos.
-// Nunca guardamos la contraseña original.
 const passwordHashes = new Map<number, string>();
 
 const normalizarEmail = (email: string): string =>
@@ -44,63 +39,42 @@ const verificarPassword = (
   return timingSafeEqual(hashIngresado, hashOriginal);
 };
 
-// LOGIN
-export const login = (
-  email: string,
-  password: string
-): LoginResult => {
+const obtenerTodosLosUsuarios = (): Usuario[] =>
+  usuarioRepository.list({ page: 1, limit: 10000, order: "asc" }).data;
+
+export const login = (email: string, password: string): LoginResult => {
   const emailNormalizado = normalizarEmail(email);
-
-  // Buscar primero entre los usuarios registrados.
-  const usuarioNuevo = usuariosRegistrados.find(
+  const usuario = obtenerTodosLosUsuarios().find(
     (u) => normalizarEmail(u.email) === emailNormalizado
   );
 
-  if (usuarioNuevo) {
-    const hash = passwordHashes.get(usuarioNuevo.id);
-
-    if (!hash || !verificarPassword(password, hash)) {
-      throw HttpError.unauthorized(
-        "Email o contraseña incorrectos"
-      );
-    }
-
-    if (!usuarioNuevo.activo) {
-      throw HttpError.forbidden(
-        "El usuario está dado de baja"
-      );
-    }
-
-    return {
-      token: `mock-token-${usuarioNuevo.id}`,
-      usuario: usuarioNuevo,
-    };
+  if (!usuario) {
+    throw HttpError.unauthorized("Email o contraseña incorrectos");
   }
 
-  // Mantener compatibilidad con los usuarios originales.
-  const usuarioMock = usuariosMock.find(
-    (u) => normalizarEmail(u.email) === emailNormalizado
+  const hash = passwordHashes.get(usuario.id);
+  const esUsuarioSeedMock = usuariosMock.some(
+    (u) => u.id === usuario.id && normalizarEmail(u.email) === emailNormalizado
   );
 
-  if (!usuarioMock || password !== MOCK_PASSWORD) {
-    throw HttpError.unauthorized(
-      "Email o contraseña incorrectos"
-    );
+  const passwordValida = hash
+    ? verificarPassword(password, hash)
+    : esUsuarioSeedMock && password === MOCK_PASSWORD;
+
+  if (!passwordValida) {
+    throw HttpError.unauthorized("Email o contraseña incorrectos");
   }
 
-  if (!usuarioMock.activo) {
-    throw HttpError.forbidden(
-      "El usuario está dado de baja"
-    );
+  if (!usuario.activo) {
+    throw HttpError.forbidden("El usuario está dado de baja");
   }
 
   return {
-    token: `mock-token-${usuarioMock.id}`,
-    usuario: usuarioMock,
+    token: `mock-token-${usuario.id}`,
+    usuario,
   };
 };
 
-// REGISTRO
 export const register = (data: {
   nombre: string;
   apellido: string;
@@ -124,46 +98,27 @@ export const register = (data: {
     );
   }
 
-  const emailDuplicado = [
-    ...usuariosMock,
-    ...usuariosRegistrados,
-  ].some((u) => normalizarEmail(u.email) === email);
+  const emailDuplicado = obtenerTodosLosUsuarios().some(
+    (u) => normalizarEmail(u.email) === email
+  );
 
   if (emailDuplicado) {
-    throw new HttpError(
-      409,
-      "Ya existe un usuario con ese email"
-    );
+    throw new HttpError(409, "Ya existe un usuario con ese email");
   }
 
-  // Generar un ID que no coincida con los usuarios existentes.
-  const todos = [...usuariosMock, ...usuariosRegistrados];
-
-  const id = todos.reduce(
-    (maximo, usuario) => Math.max(maximo, usuario.id),
-    0
-  ) + 1;
-
-  const usuario: Usuario = {
-    id,
+  const creado = usuarioRepository.create({
     nombre,
     apellido,
     email,
     rol: "tecnico",
     activo: true,
-  };
+  });
 
-  // Guardar el hash antes de registrar el usuario.
-  const hash = generarHash(data.password);
+  passwordHashes.set(creado.id, generarHash(data.password));
 
-  passwordHashes.set(id, hash);
-  usuariosRegistrados.push(usuario);
-
-  return usuario;
+  return creado;
 };
 
-// RECUPERAR CONTRASEÑA (MOCK)
 export const recuperarPassword = (_email: string): void => {
-  // En este prototipo no enviamos correos.
   return;
 };
