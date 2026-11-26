@@ -75,7 +75,6 @@ Contraseña mock para todos: **`taller123`**
 | Email | Rol |
 |---|---|
 | `admin@taller.com` | Administrador |
-| `recepcion@taller.com` | Recepcionista |
 | `tecnico@taller.com` | Técnico |
 
 El menú y las rutas se filtran por rol (`Frontend/src/router/modulos.ts`).
