@@ -1,4 +1,3 @@
-
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { clienteService } from '../../services/clienteService'
@@ -16,16 +15,15 @@ export default function ClienteDetalle() {
   useEffect(() => {
     if (!id) return
 
-    clienteService.obtener(id)
+    clienteService
+      .obtener(id)
       .then(setCliente)
       .catch(() => setError('No se pudo cargar el cliente.'))
       .finally(() => setCargando(false))
   }, [id])
 
   const cambiar = (campo: keyof NuevoCliente, valor: string | boolean) => {
-    setCliente((actual) =>
-      actual ? { ...actual, [campo]: valor } : null
-    )
+    setCliente((actual) => (actual ? { ...actual, [campo]: valor } : null))
   }
 
   const guardar = async (e: FormEvent<HTMLFormElement>) => {
@@ -35,17 +33,20 @@ export default function ClienteDetalle() {
     setGuardando(true)
     setError('')
 
-    const { id, createdAt, ...datos } = cliente
+    const datos: NuevoCliente = {
+      nombre: cliente.nombre,
+      apellido: cliente.apellido,
+      dni: cliente.dni,
+      telefono: cliente.telefono,
+      email: cliente.email,
+      activo: cliente.activo,
+    }
 
     try {
-      await clienteService.actualizar(id, datos)
+      await clienteService.actualizar(cliente.id, datos)
       navigate('/clientes')
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'No se pudo actualizar el cliente.'
-      )
+      setError(err instanceof Error ? err.message : 'No se pudo actualizar el cliente.')
     } finally {
       setGuardando(false)
     }
@@ -54,21 +55,14 @@ export default function ClienteDetalle() {
   const eliminar = async () => {
     if (!cliente) return
 
-    const confirmar = window.confirm(
-      '¿Estás seguro de eliminar este cliente?'
-    )
-
+    const confirmar = window.confirm('¿Estás seguro de eliminar este cliente?')
     if (!confirmar) return
 
     try {
       await clienteService.eliminar(cliente.id)
       navigate('/clientes')
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : 'No se pudo eliminar el cliente.'
-      )
+      setError(err instanceof Error ? err.message : 'No se pudo eliminar el cliente.')
     }
   }
 
@@ -79,9 +73,7 @@ export default function ClienteDetalle() {
   if (!cliente) {
     return (
       <section>
-        <p role="alert">
-          {error || 'Cliente no encontrado.'}
-        </p>
+        <p role="alert">{error || 'Cliente no encontrado.'}</p>
         <Link to="/clientes">Volver al listado</Link>
       </section>
     )
@@ -89,9 +81,21 @@ export default function ClienteDetalle() {
 
   return (
     <section>
-      <h1>Detalle del cliente #{cliente.id}</h1>
+      <h1>
+        Detalle del cliente #{cliente.id} — {cliente.nombre} {cliente.apellido}
+      </h1>
 
       <form onSubmit={guardar} className="form">
+        <label>
+          ID
+          <input value={cliente.id} disabled readOnly />
+        </label>
+
+        <label>
+          Fecha de alta
+          <input value={new Date(cliente.createdAt).toLocaleDateString('es-AR')} disabled readOnly />
+        </label>
+
         <label>
           Nombre
           <input
@@ -142,9 +146,7 @@ export default function ClienteDetalle() {
           Estado del cliente
           <select
             value={cliente.activo ? 'true' : 'false'}
-            onChange={(e) =>
-              cambiar('activo', e.target.value === 'true')
-            }
+            onChange={(e) => cambiar('activo', e.target.value === 'true')}
           >
             <option value="true">Activo</option>
             <option value="false">Inactivo</option>
@@ -161,11 +163,7 @@ export default function ClienteDetalle() {
           {guardando ? 'Guardando...' : 'Guardar cambios'}
         </button>
 
-        <button
-          type="button"
-          onClick={eliminar}
-          disabled={guardando}
-        >
+        <button type="button" onClick={eliminar} disabled={guardando}>
           Eliminar cliente
         </button>
 
@@ -174,4 +172,3 @@ export default function ClienteDetalle() {
     </section>
   )
 }
-
