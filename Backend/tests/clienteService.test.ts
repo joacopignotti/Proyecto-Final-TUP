@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { clienteService } from "../services/clienteService";
+import type { Cliente } from "../src/models/Cliente";
+import { clienteService } from "../src/services/clienteService";
 
 describe("clienteService", () => {
     it("lista clientes paginados y permite buscar por DNI o nombre", () => {
-    const res = clienteService.listar({ page: 1, limit: 5 });
+    const res = clienteService.listar({ page: 1, limit: 5, order: "asc" });
     expect(res.data.length).toBeLessThanOrEqual(5);
     expect(res.meta.total).toBeGreaterThanOrEqual(12);
 
-    const filtrado = clienteService.listar({ q: "30111222" });
-    expect(filtrado.data.some((c) => c.dni === "30111222")).toBe(true);
+    const filtrado = clienteService.listar({ page: 1, limit: 10, order: "asc", q: "30111222" });
+    expect(filtrado.data.some((c: Cliente) => c.dni === "30111222")).toBe(true);
     });
 
     it("crea, actualiza y elimina un cliente correctamente", () => {
@@ -30,10 +31,10 @@ describe("clienteService", () => {
 
     clienteService.eliminar(creado.id);
     expect(() => clienteService.obtener(creado.id)).toThrow("Cliente no encontrado");
-    });
+    });   
 
     it("rechaza crear un cliente con DNI duplicado", () => {
-    expect(() =>
+        expect(() =>
         clienteService.crear({
             nombre: "Duplicado",
             apellido: "Test",
