@@ -1,7 +1,5 @@
-
 import { useEffect, useState, type SyntheticEvent } from "react";
 import { useAuth } from "../../context/useAuth";
-import { request } from "../../services/apiClient";
 
 export type Rol = "administrador" | "tecnico";
 
@@ -21,6 +19,18 @@ const ETIQUETAS_ROL: Record<Rol, string> = {
   tecnico: "Técnico",
 };
 
+const API_BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/+$/, "");
+
+const getAuthHeaders = (): HeadersInit => {
+  const tokenGuardado =
+    localStorage.getItem("token") ?? localStorage.getItem("accessToken");
+
+  return {
+    "Content-Type": "application/json",
+    ...(tokenGuardado ? { Authorization: `Bearer ${tokenGuardado}` } : {}),
+  };
+};
+
 export default function Usuarios() {
   const { usuario } = useAuth();
 
@@ -34,39 +44,50 @@ export default function Usuarios() {
   const esAdmin = usuario?.rol === "administrador";
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const cargar = async () => {
       setCargando(true);
       setError(null);
-
       try {
-        const respuesta = await fetch("/api/v1/usuarios", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("taller.token") ?? ""}`,
-          },
+        const resp = await fetch(`${API_BASE}/usuarios`, {
+          headers: getAuthHeaders(),
+          signal: controller.signal,
         });
+        const body = await resp.json().catch(() => null);
 
-        if (!respuesta.ok) {
-          throw new Error("No se pudieron cargar los usuarios.");
+        if (!resp.ok) {
+          throw new Error(
+            body && typeof body.message === "string"
+              ? body.message
+              : "No se pudieron cargar los usuarios."
+          );
         }
 
-        const lista: Usuario[] = await respuesta.json();
+        const lista: Usuario[] = Array.isArray(body)
+          ? body
+          : Array.isArray(body?.data)
+            ? body.data
+            : [];
 
         setUsuarios(lista);
-
         const inicial: Record<number, Rol> = {};
         for (const u of lista) {
           inicial[u.id] = u.rol;
         }
-
         setRolesSeleccionados(inicial);
       } catch (err) {
+        if ((err as Error).name === "AbortError") return;
         setError((err as Error).message || "Error al cargar usuarios.");
       } finally {
-        setCargando(false);
+        if (!controller.signal.aborted) {
+          setCargando(false);
+        }
       }
     };
 
     void cargar();
+    return () => controller.abort();
   }, []);
 
   const handleGuardarRol = async (e: SyntheticEvent, u: Usuario) => {
@@ -74,23 +95,29 @@ export default function Usuarios() {
     if (!esAdmin) return;
 
     const nuevoRol = rolesSeleccionados[u.id] ?? u.rol;
-
     setGuardandoId(u.id);
     setError(null);
     setMensajeOk(null);
 
     try {
-      await request<Usuario>(`/usuarios/${u.id}/rol`, {
+      const resp = await fetch(`${API_BASE}/usuarios/${u.id}/rol`, {
         method: "PATCH",
-        body: { rol: nuevoRol },
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ rol: nuevoRol }),
       });
+      const body = await resp.json().catch(() => null);
+
+      if (!resp.ok) {
+        throw new Error(
+          body && typeof body.message === "string"
+            ? body.message
+            : "No se pudo actualizar el rol."
+        );
+      }
 
       setUsuarios((prev) =>
-        prev.map((item) =>
-          item.id === u.id ? { ...item, rol: nuevoRol } : item
-        )
+        prev.map((item) => (item.id === u.id ? { ...item, rol: nuevoRol } : item))
       );
-
       setMensajeOk(
         `Rol de ${u.nombre} ${u.apellido} actualizado a ${ETIQUETAS_ROL[nuevoRol]}.`
       );
@@ -131,7 +158,6 @@ export default function Usuarios() {
                 <th>Acción</th>
               </tr>
             </thead>
-
             <tbody>
               {usuarios.length === 0 ? (
                 <tr>
@@ -153,7 +179,6 @@ export default function Usuarios() {
                       <td>{u.email}</td>
                       <td>{u.activo ? "Activo" : "Inactivo"}</td>
                       <td>{ETIQUETAS_ROL[u.rol] ?? u.rol}</td>
-
                       <td>
                         <select
                           aria-label={`Rol de ${u.nombre} ${u.apellido}`}
@@ -161,10 +186,8 @@ export default function Usuarios() {
                           disabled={ocupada}
                           onChange={(e) => {
                             const valor = e.target.value as Rol;
-
                             setMensajeOk(null);
                             setError(null);
-
                             setRolesSeleccionados((prev) => ({
                               ...prev,
                               [u.id]: valor,
@@ -178,7 +201,6 @@ export default function Usuarios() {
                           ))}
                         </select>
                       </td>
-
                       <td>
                         <button
                           type="button"
@@ -200,5 +222,3 @@ export default function Usuarios() {
     </section>
   );
 }
-
-
