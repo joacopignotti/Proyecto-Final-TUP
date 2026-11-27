@@ -17,7 +17,7 @@ export const usuarioController = {
       const id = Number(req.params.id);
       const rol = req.body?.rol as Rol;
       const actualizado = usuarioService.asignarRol(id, rol);
-      res.status(200).json(actualizado);
+      res.status(200).json({ success: true, data: actualizado });
     } catch (error) {
       next(error);
     }
