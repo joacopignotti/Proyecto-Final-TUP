@@ -23,6 +23,24 @@ export const usuarioService = {
       throw HttpError.notFound("El usuario no existe");
     }
 
+    if (existente.rol === "administrador" && rol !== "administrador") {
+      const todos = usuarioRepository.list({
+        page: 1,
+        limit: 10000,
+        order: "asc",
+      }).data;
+
+      const cantidadAdmins = todos.filter(
+        (u) => u.rol === "administrador" && u.activo
+      ).length;
+
+      if (cantidadAdmins <= 1) {
+        throw HttpError.badRequest(
+          "Debe existir al menos un administrador activo en el sistema"
+        );
+      }
+    }
+
     const actualizado = usuarioRepository.update(id, { rol });
     if (!actualizado) {
       throw HttpError.notFound("El usuario no existe");
